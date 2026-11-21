@@ -69,5 +69,8 @@
     "**/@scalar/openapi-parser/vite": "^6.4.4",
     "**/execa/cross-spawn": "^6.0.6"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@1.22.22",
+  "overrides": {
+    "handlebars": "4.7.10"
+  }
 }
