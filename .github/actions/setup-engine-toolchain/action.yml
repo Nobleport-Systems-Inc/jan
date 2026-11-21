@@ -25,12 +25,16 @@ runs:
   steps:
     - name: Select the engine variant
       shell: bash
-      run: echo "JAN_ENGINE_VARIANT=${{ inputs.variant }}" >> "$GITHUB_ENV"
+      env:
+        VARIANT: ${{ inputs.variant }}
+      run: echo "JAN_ENGINE_VARIANT=$VARIANT" >> "$GITHUB_ENV"
 
     # Outside the workspace, which is re-cloned per run. NOHASHDIR because cmake
     # runs under cargo's hashed OUT_DIR, which would otherwise key every object.
     - name: Point ccache at the runner's persistent cache
       shell: bash
+      env:
+        CCACHE_MAX: ${{ inputs.ccache-max }}
       run: |
         if [ "$RUNNER_OS" = "Windows" ]; then
           echo "CCACHE_DIR=${LOCALAPPDATA}\\ccache" >> "$GITHUB_ENV"
@@ -40,7 +44,7 @@ runs:
         if [ "$RUNNER_ENVIRONMENT" = "github-hosted" ]; then
           echo "CCACHE_MAXSIZE=2G" >> "$GITHUB_ENV"
         else
-          echo "CCACHE_MAXSIZE=${{ inputs.ccache-max }}" >> "$GITHUB_ENV"
+          echo "CCACHE_MAXSIZE=$CCACHE_MAX" >> "$GITHUB_ENV"
         fi
         echo "CCACHE_NOHASHDIR=1" >> "$GITHUB_ENV"
 
